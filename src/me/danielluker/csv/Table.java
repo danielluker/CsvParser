@@ -2,6 +2,7 @@ package me.danielluker.csv;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -23,16 +24,24 @@ import java.util.stream.Collectors;
  */
 public class Table implements iTable {
 
+	public static Table createFromFile(String filename) throws FileNotFoundException, CSVMalformedException {
+		File f = new File(filename);
+		Table newInstance = null;
+		try(Scanner sc = new Scanner(f)) {
+			newInstance = new Table(sc);
+			newInstance.sourceFile = f;
+		} catch(IOException e) {
+			System.err.println("ERROR: Unable to instantiate scanner. Please check input file");
+			System.err.println("WARN: Unable to create Table instance; returning null");
+		}
+		return newInstance;
+	}
+
 	private Map<String, List<Object>> columns;
 	private int numRows, numColumns;
 	private boolean debugMode = false;
-
-	public static Table createFromFile(String filename) throws FileNotFoundException, CSVMalformedException {
-		File f = new File(filename);
-		try (Scanner sc = new Scanner(f)) {
-			return new Table(sc);
-		}
-	}
+	
+	private transient File sourceFile;
 	
 	public static void main(String args[]) {
 		String test = "\"\"\"\",\",\",,";
