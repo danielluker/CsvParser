@@ -36,6 +36,14 @@ public class Row {
 		return sb.substring(0, sb.length() - 1);
 	}
 	
+	public Object getCell(String columnLabel) {
+		return this.values.get(columnLabel);
+	}
+	
+	public Object getCell(int columnIndex) {
+		return this.values.get(this.columnIndices[columnIndex]);
+	}
+	
 	@Override
 	public String toString() {
 		return this.values.toString();
