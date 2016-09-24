@@ -162,6 +162,10 @@ public class Table implements iTable {
 		processFile(sc);
 	}
 
+	private Table() {
+		this.columns = new HashMap<>();
+	}
+	
 	private Table(Scanner sc, char delimiter) throws CSVMalformedException {
 		this(sc, delimiter, true);
 	}
@@ -243,7 +247,7 @@ public class Table implements iTable {
 		List<Object> newList = this.columns.get(columnLabel).stream().map(alterator).collect(Collectors.toList());
 		this.columns.put(columnLabel, newList);
 	}
-
+	
 	@Override
 	public int appendRow(Row newRow) {
 		return insertRow(this.numRows, newRow);
@@ -310,6 +314,15 @@ public class Table implements iTable {
 	@Override
 	public String[] getHeaders() {
 		return this.columns.keySet().toArray(new String[this.numColumns]);
+	}
+	
+	@Override
+	public int getNumRows() {
+		return this.numRows;
+	}
+	
+	public int getNumColumns() {
+		return this.numColumns;
 	}
 
 	@Override
