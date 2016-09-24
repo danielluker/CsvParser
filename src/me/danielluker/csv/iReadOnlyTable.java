@@ -12,6 +12,10 @@ public interface iReadOnlyTable {
 	public Row getRow(int rowNumber);
 
 	public Row getRowByColumnValue(String columnLabel, Object value);
+	
+	public int getNumRows();
+	
+	public int getNumColumns();
 
 	public String[] getHeaders();
 
