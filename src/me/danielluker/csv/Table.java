@@ -29,7 +29,6 @@ public class Table implements iTable {
 		Table newInstance = null;
 		try(Scanner sc = new Scanner(f)) {
 			newInstance = new Table(sc);
-			newInstance.sourceFile = f;
 		} catch(IOException e) {
 			System.err.println("ERROR: Unable to instantiate scanner. Please check input file");
 			System.err.println("WARN: Unable to create Table instance; returning null");
@@ -38,17 +37,16 @@ public class Table implements iTable {
 	}
 
 	private Map<String, List<Object>> columns;
+	private String[] columnIndices;
 	private int numRows, numColumns;
 	private boolean debugMode = false;
 	
-	private transient File sourceFile;
-	
 	public static void main(String args[]) {
 		String test = "\"\"\"\",\",\",,";
-		System.out.println(splitCsvString(test).toString());
+		System.out.println(splitCsvString(test, ',').toString());
 	}
 
-	private static List<String> splitCsvString(String input) {
+	private static List<String> splitCsvString(String input, char delimiter) {
 		StringBuilder s = new StringBuilder(input);
 		List<String> csvElements = new ArrayList<>();
 		int start = 0;
@@ -74,7 +72,7 @@ public class Table implements iTable {
 				continue;
 			}
 			
-			else if(s.charAt(i) == ',') {
+			else if(s.charAt(i) == delimiter) {
 				csvElements.add(s.substring(start, i));
 				start = i+1;
 			}
@@ -85,30 +83,24 @@ public class Table implements iTable {
 		return csvElements;
 	}
 	
-	private Table() {
-		this.columns = new HashMap<>();
-	}
-
 	private Table(Scanner sc) throws CSVMalformedException {
-		this();
+		this.columns = new HashMap<>();
 		if (!sc.hasNextLine())
 			throw new CSVMalformedException("No lines found in file");
-		String[] columns = sc.nextLine().split(",");
-		Map<String, List<Object>> tempMap = new HashMap<>();
-		for (String cols : columns) {
+		columnIndices = splitCsvString(sc.nextLine(), ',').toArray(new String[0]);
+		for (String cols : columnIndices) {
 			List<Object> tList = new ArrayList<>();
-			tempMap.put(cols, tList);
 			this.columns.put(cols, tList);
 		}
-		this.numColumns = columns.length;
+		this.numColumns = columnIndices.length;
 		int iterator = 0;
 		while (sc.hasNextLine()) {
-			String[] vals = sc.nextLine().split(",");
-			if (vals.length != this.numColumns) {
+			List<String> vals = splitCsvString(sc.nextLine(), ',');
+			if (vals.size() != this.numColumns) {
 				throw new CSVMalformedException(iterator, CSVMalformedException.ERR_COLUMN_COUNT);
 			}
 			for (int i = 0; i < this.numColumns; i++) {
-				tempMap.get(columns[i]).add(vals[i]);
+				this.columns.get(columnIndices[i]).add(vals.get(i));
 			}
 			iterator++;
 		}
@@ -138,7 +130,7 @@ public class Table implements iTable {
 			Object retVal = this.columns.get(s).get(rowNumber);
 			rData.put(s, retVal);
 		}
-		return new Row(rData);
+		return new Row(rData, columnIndices);
 	}
 
 	@Override
@@ -222,7 +214,7 @@ public class Table implements iTable {
 			m.put(s, l.remove(atIndex));
 		}
 		this.numRows--;
-		return new Row(m);
+		return new Row(m, this.columnIndices);
 	}
 
 	@Override

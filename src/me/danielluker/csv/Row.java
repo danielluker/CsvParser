@@ -11,6 +11,7 @@ import java.util.Map;
 public class Row {
 
 	private Map<String, Object> values;
+	private String[] columnIndices;
 
 	Row(String[] columns, Object[] vals) {
 		this.values = new HashMap<>();
@@ -19,8 +20,9 @@ public class Row {
 		}
 	}
 
-	Row(Map<String, Object> vals) {
+	Row(Map<String, Object> vals, String[] columnIndices) {
 		this.values = vals;
+		this.columnIndices = columnIndices;
 	}
 	
 	public Map<String, Object> getValues() {
@@ -37,6 +39,13 @@ public class Row {
 	@Override
 	public String toString() {
 		return this.values.toString();
+	}
+	
+	public String toStringWithColumnOrdering(String delimiter) {
+		StringBuilder sb = new StringBuilder();
+		for(String s : this.columnIndices) 
+			sb.append(this.values.get(s) + delimiter + " ");
+		return sb.substring(0, sb.length()-delimiter.length()-1);
 	}
 
 }
