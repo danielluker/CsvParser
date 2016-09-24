@@ -8,8 +8,6 @@ A simple and lightweight Java CSV parser library
 ```java
 import me.danielluker.csv.Table;
 
-...
-
 	/***
 	 * Example method which will use a table saved in a file.
 	 *
@@ -46,12 +44,12 @@ import me.danielluker.csv.Table;
 		System.out.println(t.getRow(rowIndex).toStringWithColumnOrdering(",")); // or we can provide any delimiter
 		
 	}
-	```
+```
 	
 ###Writing to a table
 	
-	**This is still in progress. If you want to help, please do a pull request... have implemented a basic "addColumn" method, but need to make sure it works. Adding a row is done.**
-	I will also implement creating tables from scratch!
+*This is still in progress*. If you want to help, please do a pull request... have implemented a basic "addColumn" method, but need to make sure it works. Adding a row is done.
+I will also implement creating tables from scratch!
 	
 ###Writing a table to file
 
