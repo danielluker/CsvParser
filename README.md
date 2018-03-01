@@ -3,7 +3,7 @@ A simple and lightweight Java CSV parser library
 
 ## Code Examples
 
-###Reading from a table
+### Reading from a table
 
 ```java
 import me.danielluker.csv.Table;
@@ -46,12 +46,12 @@ import me.danielluker.csv.Table;
 	}
 ```
 	
-###Writing to a table
+### Writing to a table
 	
 *This is still in progress*. If you want to help, please do a pull request... have implemented a basic "addColumn" method, but need to make sure it works. Adding a row is done.
 I will also implement creating tables from scratch!
 	
-###Writing a table to file
+### Writing a table to file
 
 ```java
 // followed from the variables above
@@ -61,7 +61,7 @@ File f = t.writeToFile(newFile);
 
 So, you can load a csv table (or create one from scratch), read the values, add your own data, and save it to a file!. Simple, with intuitive and natural API calls.
 
-##More complex functionality
+## More complex functionality
 
 There are other cool things you can do. For instance, you can cast entire columns to certain values.
 So, if you know, let's say, the second column contains all decimal values, you could do the following:
